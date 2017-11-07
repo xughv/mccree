@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"jsx": "preserve",
+		"experimentalDecorators": true,
+		"lib": [
+			"esnext",
+			"dom"
+		],
+		"paths": {
+			
+    	}
+	},
+	"include": [
+		"./src"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}
