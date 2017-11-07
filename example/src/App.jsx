@@ -7,7 +7,6 @@ import { connect } from 'vava';
 export class App extends Component {
 
   componentDidMount() {
-    console.log('componentDidMount', this.props);
     const { userModel } = this.props;
     userModel.fetchName();
   }

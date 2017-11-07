@@ -33,15 +33,15 @@ export function createModel({
   });
 
   const reducer = Object.keys(reducers).length ? handleActions(tmpReducers, state) : null;
-  const effect = subSagas.length ? function* () { yield subSagas } : null;
-
-  // injectModel(name, actions, reducer, effect);
+  const saga = subSagas.length ? function* () { yield subSagas } : null;
 
   return {
     name,
     actions,
     reducer,
-    effect,
+    saga,
+    effects,
+    reducers,
   }
 
 }

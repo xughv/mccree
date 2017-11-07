@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import { connect as _connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { models } from './store';
