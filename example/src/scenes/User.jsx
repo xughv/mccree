@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'vava';
 
-@connect(({ user }) => ({
-  userModel: user
+@connect(({ userModel }) => ({
+  userModel
 }))
 export class App extends Component {
 

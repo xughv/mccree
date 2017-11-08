@@ -7,7 +7,7 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
-    "react-router-redux": "^4.0.8"
+    "react-router-redux": "next"
   },
   "scripts": {
     "start": "webpack-dev-server --open",

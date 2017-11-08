@@ -4,6 +4,7 @@
 
 import { createStore as reduxCreateStore, applyMiddleware, combineReducers, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import { createModel } from './model';
 
 let _store = null, _models = null, _reducers = {};
 
@@ -13,6 +14,10 @@ const _actions = {};
  * Inject Model
  */
 function injectModel({ name, actions, reducer, saga }) {
+
+	if (!name) {
+    throw new Error('invalid model');
+  }
   
   _actions[name] = actions;
   const store = getStore();
@@ -36,7 +41,7 @@ export function getStore() {
 }
 
 
-export function createStore({ middleware = [], models = [], reducers = {} } = {}) {
+export function createStore({ middlewares = [], models = {}, reducers = {} } = {}) {
 
 	if (_store) {
     throw new Error('store has been created');
@@ -49,7 +54,7 @@ export function createStore({ middleware = [], models = [], reducers = {} } = {}
 	const store = reduxCreateStore(
 		state => state,
 		compose(
-			applyMiddleware(...middleware, sagaMiddleware),
+			applyMiddleware(...middlewares, sagaMiddleware),
 			process.env.NODE_ENV !== 'production' && typeof window === 'object' && window.devToolsExtension ? window.devToolsExtension({
 			}) : f => f
 		)
@@ -59,24 +64,21 @@ export function createStore({ middleware = [], models = [], reducers = {} } = {}
 	_store = store;
 	_models = {};
 
-	models.forEach(model => {
+	Object.keys(models).forEach(name => {
 
-		if (!model.name) {
-			throw new Error('invalid model');
-		}
+		const modelObject = models[name];
+		const model = createModel(name, modelObject);
 
-		const { name, actions, reducers, effects } = model;
+		const { actions, reducers, effects } = model;
 		_models[name] = { name, actions, reducers, effects };
 
 		injectModel(model);
 	});
-console.log('createStore');
-	return store;
+
+	return _store;
 }
 
 export {
 	_models as models,
 	_actions as actions
 };
-
-

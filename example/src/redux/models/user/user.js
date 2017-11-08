@@ -1,10 +1,8 @@
-import { createModel, actions } from 'vava';
+import { actions, getModel } from 'vava';
 import { delay } from '../../help';
 
-export default createModel({
+export const userModel = {
   
-  name: 'user',
-
   state: {
     name: ''
   },
@@ -19,8 +17,8 @@ export default createModel({
   effects: {
     *fetchName({}, { put }) {
       yield delay(2000);
-      yield put(actions['user'].fetchNameSuccess({ name: 'Vava' }));
+      yield put(actions['userModel'].fetchNameSuccess({ name: 'VAVA' }));
     }
-  }
+  },
 
-});
+};

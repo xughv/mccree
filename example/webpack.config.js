@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const config = {
 
   entry: [
-    './src/index.js'
+    './src/app.js'
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),

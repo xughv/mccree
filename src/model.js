@@ -2,8 +2,7 @@ import { createAction, handleActions } from "redux-actions";
 import { call, takeEvery } from 'redux-saga/effects';
 import * as sagaEffects from './efferts';
 
-export function createModel({
-  name = '',
+export function createModel(name = '', {
   state = {},
   effects = {},
   reducers = {},
