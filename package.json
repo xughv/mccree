@@ -1,10 +1,19 @@
 {
   "name": "vava",
   "version": "1.0.0",
-  "description": "",
+  "description": "Using redux with models",
   "main": "./lib/index.js",
-  "author": "",
+  "author": "xughv",
   "license": "ISC",
+  "keywords": [
+    "react",
+    "redux",
+    "redux-saga"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xughv/vava.git"
+  },
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.23.0",
     "react": "^16.0.0",

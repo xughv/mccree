@@ -1,22 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Switch, Route, Redirect } from 'react-router';
+import { Switch, Route } from 'react-router';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 
 import createHistory from 'history/createBrowserHistory';
 
 import vava, { Provider } from 'vava';
 
-import { App } from './App';
-import { user } from './redux/models';
+import {
+  userModel
+} from './redux/models';
+
+import {
+  Home,
+  Test,
+} from './scenes';
+
 
 const history = createHistory({ basename: '/' });
 
 const store = vava.createStore({
-  models: [
-    user
-  ],
-  middleware: [
+  models: {
+    userModel,
+  },
+  middlewares: [
     routerMiddleware(history)
   ]
 });
@@ -25,7 +32,8 @@ ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <Switch>
-        <Route strict path="/" component={App} />
+        <Route strict path="/test" component={Test} />
+        <Route strict path="/" component={Home} />
       </Switch>
     </ConnectedRouter>
   </Provider>, 
