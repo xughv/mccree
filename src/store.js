@@ -4,6 +4,7 @@
 
 import { createStore as reduxCreateStore, applyMiddleware, combineReducers, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import { effectMiddleware } from './effectMiddleware';
 import { createModel } from './model';
 
 let _store = null, _models = null, _reducers = {};
@@ -54,7 +55,7 @@ export function createStore({ middlewares = [], models = {}, reducers = {} } = {
 	const store = reduxCreateStore(
 		state => state,
 		compose(
-			applyMiddleware(...middlewares, sagaMiddleware),
+			applyMiddleware(...middlewares, sagaMiddleware, effectMiddleware),
 			process.env.NODE_ENV !== 'production' && typeof window === 'object' && window.devToolsExtension ? window.devToolsExtension({
 			}) : f => f
 		)

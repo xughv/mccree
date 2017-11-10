@@ -13,7 +13,7 @@ import {
 
 import {
   Home,
-  User,
+  Test,
 } from './scenes';
 
 
@@ -32,8 +32,8 @@ ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <Switch>
+        <Route strict path="/test" component={Test} />
         <Route strict path="/" component={Home} />
-        <Route strict path="/user" component={User} />
       </Switch>
     </ConnectedRouter>
   </Provider>, 

@@ -4,11 +4,11 @@ import { connect } from 'vava';
 @connect(({ userModel }) => ({
   userModel
 }))
-export class Home extends Component {
+export class Test extends Component {
 
   componentDidMount() {
     const { userModel } = this.props;
-    userModel.fetchName();
+    userModel.execEffect();
   }
   
   render() {

@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { connect } from 'vava';
+import { connect, awaitable } from 'vava';
 
 @connect(({ userModel }) => ({
   userModel
 }))
-export class App extends Component {
+export class Home extends Component {
 
   componentDidMount() {
+    this.saveName();
+  }
+
+  saveName = async () => {
     const { userModel } = this.props;
-    userModel.fetchName();
+    await awaitable(userModel.saveName)('vava');
+    console.log('done');
   }
   
   render() {
