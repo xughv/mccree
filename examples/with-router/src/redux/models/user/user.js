@@ -1,4 +1,4 @@
-import { actions, getModel } from 'vava';
+import { actions, getModel } from 'mccree';
 export const userModel = {
   
   state: {
@@ -19,7 +19,7 @@ export const userModel = {
     },
 
     *execEffect({}, { execEffect }) {
-      yield execEffect(actions.userModel.saveName('vava'));
+      yield execEffect(actions.userModel.saveName('mccree'));
       console.log('done');
     }
   },

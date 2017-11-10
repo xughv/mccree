@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'vava';
+import { connect } from 'mccree';
 
 @connect(({ userModel }) => ({
   userModel
