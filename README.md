@@ -1,6 +1,12 @@
-# vava
+# McCree
 
-vava 基于 [redux]()、[redux-saga]() 和 [react-redux]() 封装，提供了简单的方法来以 **Model** 的方式组织 `state`、`reducer` 及 `effect`。
+McCree 基于 [redux]()、[redux-saga]() 和 [react-redux]() 封装，提供了简单的方法来以 **Model** 的方式组织 `state`、`reducer` 及 `effect`。
+
+## 安装
+
+```
+npm install mccree --save
+```
 
 ## 相关概念
 
@@ -24,7 +30,7 @@ vava 基于 [redux]()、[redux-saga]() 和 [react-redux]() 封装，提供了简
 
 当然，空对象 `{ }` 同样可以作为一个 **triad**。
 
-*（vava 中，**model** 也为一个 **triad**，由 `createStore` 注册时传入）*
+*（mccree 中，**model** 也为一个 **triad**，由 `createStore` 注册时传入）*
 
 #### effects
 

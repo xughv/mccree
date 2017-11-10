@@ -5,7 +5,7 @@ import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 
 import createHistory from 'history/createBrowserHistory';
 
-import vava, { Provider } from 'vava';
+import mccree, { Provider } from 'mccree';
 
 import {
   userModel
@@ -19,7 +19,7 @@ import {
 
 const history = createHistory({ basename: '/' });
 
-const store = vava.createStore({
+const store = mccree.createStore({
   models: {
     userModel,
   },
