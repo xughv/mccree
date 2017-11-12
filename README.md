@@ -1,6 +1,6 @@
 # McCree
 
-McCree 基于 [redux]()、[redux-saga]() 和 [react-redux]() 封装，提供了简单的方法来以 **Model** 的方式组织 `state`、`reducer` 及 `effect`。
+McCree 基于 [redux](https://github.com/reactjs/redux)、[redux-saga](https://github.com/redux-saga/redux-saga) 和 [react-redux](https://github.com/reactjs/react-redux) 封装，提供了简单的方法来以 **Model** 的方式组织 `state`、`reducer` 及 `effect`。(Inspired by [dva](https://github.com/dvajs/dva) and [mirror](https://github.com/mirrorjs/mirror))
 
 ## 安装
 
@@ -32,6 +32,14 @@ npm install mccree --save
 
 *（mccree 中，**model** 也为一个 **triad**，由 `createStore` 注册时传入）*
 
+#### state
+
+表示 **model** 的状态数据。
+
+#### reducers
+
+同 [redux 中 reducer](https://redux.js.org/docs/basics/Reducers.html)，用来处理 action，改变 **model** 中 `state`。
+
 #### effects
 
 以 key / value 格式定义 effect，由 action 触发。
@@ -42,12 +50,17 @@ npm install mccree --save
 }
 ```
 
-effects 包含所有 redux-saga 中所有可用 effects，另提供了：
+参数中 `effects` 对象中包含 [redux-saga](https://redux-saga.js.org/docs/api/index.html) 中所有可用的 effects，另提供了：
 
 `delay(ms)`：延迟。
 
 `execEffect(action)`：用于触发指定 effect，返回 `Promise`。
 
+---
+
+#### action
+
+使用 `reducers` 及 `effects` 中的 key 作为 action type，dispatch 后会触发相应 `reducers`/`effects`。
 
 ## API
 
@@ -63,7 +76,7 @@ effects 包含所有 redux-saga 中所有可用 effects，另提供了：
 
 #### opts
 
-* middlewares
+* `middlewares`
 
   ```javascript
   middlewares: [
@@ -71,7 +84,7 @@ effects 包含所有 redux-saga 中所有可用 effects，另提供了：
   ]
   ```
 
-* models
+* `models`
 
   以 key / value 格式注册 model，其中 key 被设置为该 model 的命名空间（namespace），value 为一个 **triad**。
 
@@ -81,7 +94,7 @@ effects 包含所有 redux-saga 中所有可用 effects，另提供了：
   }
   ```
 
-* reducers
+* `reducers`
 
   指定 models 外的 reducer。
 
@@ -95,18 +108,12 @@ effects 包含所有 redux-saga 中所有可用 effects，另提供了：
 
 同 `react-redux`。
 
----
-
-### `actions`
-
-返回全部的 Action Creator，以 namespace 划分，用于 effects 等地方，如：
-
-```javascript
-yield put(actions.userModel.fetchData());
-```
----
 
 ### `connect(mapModelToProps)`
+
+`connect` 用于连接 **model** 和组件，其中 `mapModelToProps` 的返回值将被传入组件的 `props` 中。
+
+**model** 中定义的 `state` 位于 `model.state` 中， `action` 在传入后以 `model.xxx({ /* payload */ })` 方式派发。
 
 ```javascript
 @connect(({
@@ -116,9 +123,7 @@ yield put(actions.userModel.fetchData());
 }))
 ```
 
-组件中，userModel 的 state 位于 `this.props.userModel.state` 中，action 以 `this.props.userModel.xxx({ /* payload */ })` 方式派发。
-
-*其中 mapModelToProps 返回值可用对象的 key 定义传入组件 props 的 model 的命名。*
+*`mapModelToProps` 的返回值将被传入组件 `props` 中。*
 
 ---
 
@@ -128,4 +133,14 @@ yield put(actions.userModel.fetchData());
 
 ```javascript
 await awaitable(this.props.userModel.xxx)({ /* payload */ })
+```
+
+---
+
+### `actions` 对象
+
+包含全部的 Action Creator，以 namespace 划分，可用于 `effects` 等处，如：
+
+```javascript
+yield put(actions.userModel.fetchData());
 ```
