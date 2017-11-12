@@ -2,7 +2,7 @@ import { actions, getModel } from 'mccree';
 export const userModel = {
   
   state: {
-    name: ''
+    name: 'McCree'
   },
 
   reducers: {
@@ -14,12 +14,12 @@ export const userModel = {
 
   effects: {
     *saveName({ payload }, { put, delay }) {
-      yield delay(2000);
+      yield delay(1000);
       yield put(actions.userModel.saveNameSuccess({ name: payload }));
     },
 
     *execEffect({}, { execEffect }) {
-      yield execEffect(actions.userModel.saveName('mccree'));
+      yield execEffect(actions.userModel.saveName('execEffect'));
       console.log('done');
     }
   },

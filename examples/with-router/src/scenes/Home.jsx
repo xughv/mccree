@@ -6,13 +6,16 @@ import { connect, awaitable } from 'mccree';
 }))
 export class Home extends Component {
 
-  componentDidMount() {
-    this.saveName();
-  }
-
-  saveName = async () => {
+  handleClick = async () => {
     const { userModel } = this.props;
-    await awaitable(userModel.saveName)('mccree');
+    const names = [
+      'McCree',
+      'Bastion',
+      'Mei',
+      'Junkrat',
+      'D.Va',
+    ]
+    await awaitable(userModel.saveName)(names[parseInt(Math.random()*5, 10)]);
     console.log('done');
   }
   
@@ -22,7 +25,10 @@ export class Home extends Component {
     const { name } = userModel.state;
 
     return (
-      <div>{name}</div>
+      <div>
+        <h1>{name}</h1>
+        <button onClick={this.handleClick}>Change Name</button>
+      </div>
     );
   }
 }

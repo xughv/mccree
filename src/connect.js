@@ -11,12 +11,10 @@ export function connect(mapModelToProps = ({}) => ({})) {
 	return _connect(
 		// mapStateToProps
 		(state, ownProps) => {
-			const map = mapModelToProps(models);
 			const modelsStates = {};
 
-			Object.keys(map).forEach(key => {
-				const { name } = (map[key] || {});
-				name && (modelsStates[key] = state[name]);
+			Object.keys(models).forEach(name => {
+				modelsStates[name] = state[name] || {};
 			});
 
 			return modelsStates;
@@ -24,12 +22,11 @@ export function connect(mapModelToProps = ({}) => ({})) {
 
 		// mapDispatchToProps
 		(dispatch) => {
-			const map = mapModelToProps(models);
 			const modelsActions = {};
 
-			Object.keys(map).forEach(key => {
-				const { actions = {} } = (map[key] || {});
-				modelsActions[key] = bindActionCreators(actions, dispatch);
+			Object.keys(models).forEach(name => {
+				const { actions = {} } = models[name];
+				modelsActions[name] = bindActionCreators(actions, dispatch);
 			});
 
 			return modelsActions;
@@ -37,16 +34,14 @@ export function connect(mapModelToProps = ({}) => ({})) {
 
 		// mergeProps
 		(stateProps, dispatchProps) => {
-			const models = {};
-
-			Object.keys(dispatchProps).forEach(key => {
-				models[key] = {
-					...dispatchProps[key],
-					state: stateProps[key] || {},
-				};
+			const propModels = {};
+			Object.keys(models).forEach(name => {
+				propModels[name] = {
+					...dispatchProps[name],
+					state: stateProps[name] || {},
+				}
 			});
-
-			return { ...models }
+			return mapModelToProps(propModels);
 		}
 	);
 
