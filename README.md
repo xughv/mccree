@@ -106,25 +106,38 @@ npm install mccree --save
 
 ### `<Provider store >`
 
-同 `react-redux`。
+  同 [react-redux/Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store)
 
+### `connect([mapModelToProps], [mapStateToProps], [mapDispatchToProps], [mergeProps], [options])`
 
-### `connect(mapModelToProps)`
+`connect` 用于连接 **redux** 和组件。
 
-`connect` 用于连接 **model** 和组件，其中 `mapModelToProps` 的返回值将被传入组件的 `props` 中。
+* `[mapModelToProps(models): modelPorps]` (*Function*)
 
-**model** 中定义的 `state` 位于 `model.state` 中， `action` 在传入后以 `model.xxx({ /* payload */ })` 方式派发。
+  **model** 中定义的 `state` 位于 `model.state` 中， `action` 在传入后以 `model.xxx({ /* payload */ })` 方式派发。
 
-```javascript
-@connect(({
-  userModel
-}) => ({
-  userModel
-}))
-```
+  ```javascript
+  @connect(({ userModel }) => ({
+    userModel
+  }))
+  ```
 
-*`mapModelToProps` 的返回值将被传入组件 `props` 中。*
+* `[mapStateToProps(state, [ownProps]): stateProps]` (*Function*):
 
+  同 [react-redux/connect[mapStateToProps]](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
+
+* `[mapDispatchToProps(dispatch, [ownProps]): dispatchProps]` (*Object* or *Function*):
+
+  同 [react-redux/connect[mapDispatchToProps]](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
+
+* `[mergeProps(modelProps, stateProps, dispatchProps, ownProps): props]` (*Function*):
+
+  等同 [react-redux/connect[mergeProps]](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)，添加了 `modelProps`。
+
+* `[options]` (*Object*)
+
+  同 [react-redux/connect[options]](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
+  
 ---
 
 ### `awaitable(dispatcher)(payload): Promise`
