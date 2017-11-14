@@ -2,47 +2,71 @@ import { connect as _connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { models } from './store';
 
-export function connect(mapModelToProps = ({}) => ({})) {
-
-  if (typeof mapModelToProps !== 'function') {
-    throw new Error('mapModelToProps is must be a function');
-	}
+export function connect(
+	mapModelToProps,
+	mapStateToProps,
+	mapDispatchToProps,
+	mergeProps = (m = {}, s = {}, d = {}) => ({ ...m, ...s, ...d }),
+	options
+) {
 
 	return _connect(
 		// mapStateToProps
 		(state, ownProps) => {
-			const modelsStates = {};
+			const modelsState = {};
+			const props = mapStateToProps ? (mapStateToProps(state, ownProps) || {}) : {};
 
 			Object.keys(models).forEach(name => {
-				modelsStates[name] = state[name] || {};
+				modelsState[name] = state[name] || {};
 			});
 
-			return modelsStates;
+			return {
+				props,
+				models: modelsState,
+			}
 		},
 
 		// mapDispatchToProps
 		(dispatch) => {
 			const modelsActions = {};
+			let props = {};
+			if (typeof mapDispatchToProps === 'function') {
+				props = mapDispatchToProps ? (mapDispatchToProps(dispatch) || {}) : {};
+			}
+			if (typeof mapDispatchToProps === 'object') {
+				props = bindActionCreators(mapDispatchToProps, dispatch);
+			}
 
 			Object.keys(models).forEach(name => {
-				const { actions = {} } = models[name];
-				modelsActions[name] = bindActionCreators(actions, dispatch);
+				const { actions = {}, actionCreators } = models[name];
+				if (!actionCreators) {
+					models[name].actionCreators = bindActionCreators(actions, dispatch);
+				}
+				modelsActions[name] = models[name].actionCreators;
 			});
 
-			return modelsActions;
+			return {
+				props,
+				models: modelsActions,
+			}
 		},
 
 		// mergeProps
 		(stateProps, dispatchProps) => {
 			const propModels = {};
+			const modelStateProps = stateProps.models, modelDispatchProps = dispatchProps.models;
+
 			Object.keys(models).forEach(name => {
 				propModels[name] = {
-					...dispatchProps[name],
-					state: stateProps[name] || {},
+					...modelDispatchProps[name],
+					state: modelStateProps[name] || {},
 				}
 			});
-			return mapModelToProps(propModels);
-		}
+			const modelProps = mapModelToProps(propModels);
+			return mergeProps(modelProps, stateProps.props, dispatchProps.props);
+		},
+
+		options
 	);
 
 }
