@@ -1,5 +1,5 @@
 import { createAction, handleActions } from "redux-actions";
-import { call, takeEvery } from 'redux-saga/effects';
+import { put, call, takeEvery } from 'redux-saga/effects';
 import * as sagaEffects from './efferts';
 
 export function createModel(name = '', {
@@ -19,17 +19,23 @@ export function createModel(name = '', {
 
     return call(function*() {
       yield takeEvery(nkey, function* ({ type, payload }) {
+
         // handle awaitable
-        if (typeof payload === 'object' && '@@done' in payload) {
-          const done = payload['@@done'];
+        if (typeof payload === 'object' && '@@mccree/done' in payload) {
+          const done = payload['@@mccree/done'];
           try {
-            yield subSaga({ type, payload: payload.data }, sagaEffects);
-            done.resolve();
-          } catch(err) {
-            done.reject(err);
+            const result = yield subSaga({ type, payload: payload.data }, sagaEffects);
+            done.resolve(result);
+          } catch(error) {
+            console.log(`[ERROR] [effect](${type})`, error);
+            done.reject(error);
           }
         } else {
-          yield subSaga({ payload }, sagaEffects);
+          try {
+            yield subSaga({ type, payload }, sagaEffects);
+          } catch(error) {
+            console.log(`[ERROR] [effect](${type})`, error);
+          }
         }
       });
     })

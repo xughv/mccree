@@ -30,7 +30,7 @@ const execEffect = action => {
   return new Promise((resolve, reject) => {
     action.payload = {
       data: payload,
-      '@@done': { resolve, reject },
+      '@@mccree/done': { resolve, reject },
     }
     getStore().dispatch(action);
   });

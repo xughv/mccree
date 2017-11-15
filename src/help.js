@@ -13,7 +13,7 @@ export function combineTriads(...triads) {
     }
     effects = {
       ...effects,
-      ...(effects.state || {}),
+      ...(triad.effects || {}),
     }
   });
 
@@ -24,7 +24,7 @@ export const awaitable = dispatcher => payload => {
   return new Promise((resolve, reject) => {
     dispatcher({
       data: payload,
-      '@@done': { resolve, reject },
+      '@@mccree/done': { resolve, reject },
     });
   });
 }

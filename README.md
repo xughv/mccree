@@ -112,7 +112,7 @@ npm install mccree --save
 
 `connect` 用于连接 **redux** 和组件。
 
-* `[mapModelToProps(models): modelPorps]` (*Function*)
+* `[mapModelToProps(models, [ownProps]): modelPorps]` (*Function*)
 
   **model** 中定义的 `state` 位于 `model.state` 中， `action` 在传入后以 `model.xxx({ /* payload */ })` 方式派发。
 

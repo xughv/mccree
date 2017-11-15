@@ -6,7 +6,7 @@ export function connect(
 	mapModelToProps,
 	mapStateToProps,
 	mapDispatchToProps,
-	mergeProps = (m = {}, s = {}, d = {}) => ({ ...m, ...s, ...d }),
+	mergeProps = (m = {}, s = {}, d = {}, o = {}) => ({ ...m, ...s, ...d, ...o }),
 	options
 ) {
 
@@ -52,7 +52,7 @@ export function connect(
 		},
 
 		// mergeProps
-		(stateProps, dispatchProps) => {
+		(stateProps, dispatchProps, ownProps) => {
 			const propModels = {};
 			const modelStateProps = stateProps.models, modelDispatchProps = dispatchProps.models;
 
@@ -62,8 +62,8 @@ export function connect(
 					state: modelStateProps[name] || {},
 				}
 			});
-			const modelProps = mapModelToProps(propModels);
-			return mergeProps(modelProps, stateProps.props, dispatchProps.props);
+			const modelProps = mapModelToProps(propModels, ownProps);
+			return mergeProps(modelProps, stateProps.props, dispatchProps.props, ownProps);
 		},
 
 		options
