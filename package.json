@@ -1,6 +1,6 @@
 {
   "name": "mccree",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Using redux with models",
   "main": "./lib/index.js",
   "author": "xughv",
