@@ -17,50 +17,46 @@ npm install mccree --save
 ```javascript
 {
   state: {
-
   },
   reducers: {
-
   },
   effects: {
-
   }
 }
 ```
 
-当然，空对象 `{ }` 同样可以作为一个 **triad**。
+当然，空对象 `{ }` 同样可以作为一个 **Triad**。
 
-*（mccree 中，**model** 也为一个 **triad**，由 `createStore` 注册时传入）*
+* `state`
 
-#### state
+  表示 **Triad** 的状态数据。
 
-表示 **model** 的状态数据。
+* `reducers`
 
-#### reducers
+  同 [redux 中 reducer](https://redux.js.org/docs/basics/Reducers.html)，用来处理 action，改变 **Triad** 中 `state`。
 
-同 [redux 中 reducer](https://redux.js.org/docs/basics/Reducers.html)，用来处理 action，改变 **model** 中 `state`。
+* `effects`
 
-#### effects
+  以 key / value 格式定义 effect，由 action 触发。
 
-以 key / value 格式定义 effect，由 action 触发。
+  ```javascript
+  *(action, effects) {
+  }
+  ```
 
-```javascript
-*(action, effects) {
+  参数中 `effects` 对象中包含 [redux-saga](https://redux-saga.js.org/docs/api/index.html) 中所有可用的 effects，另提供了：
 
-}
-```
+  `delay(ms)`：延迟。
 
-参数中 `effects` 对象中包含 [redux-saga](https://redux-saga.js.org/docs/api/index.html) 中所有可用的 effects，另提供了：
+  `execEffect(action)`：用于触发指定 effect，返回 `Promise`，可利用该方法代替 put 以实现同步执行 effect。
 
-`delay(ms)`：延迟。
+### Model
 
-`execEffect(action)`：用于触发指定 effect，返回 `Promise`。
+在 mccree 中，**Model** 也为一个 **Triad**，在 `createStore` 中注册，使用时可通过 `connect` 引入。
 
----
+### Action
 
-#### action
-
-使用 `reducers` 及 `effects` 中的 key 作为 action type，dispatch 后会触发相应 `reducers`/`effects`。
+同 [redux 中 action](https://redux.js.org/docs/basics/Actions.html)，`reducers` 及 `effects` 中的 key 将会作为 *Action Type*（`dispatch` 后会触发相应 `reducers`/`effects`），同时在 **Model** 中会利用 [bindActionCreators](https://redux.js.org/docs/api/bindActionCreators.html) 生成相应的绑定了 `dispatch` 的 *Action Creator*，可直接使用 `[model].[actionType]({/* payload */})` 来派发一个 **Action**。
 
 ## API
 
@@ -112,7 +108,7 @@ npm install mccree --save
 
 `connect` 用于连接 **redux** 和组件。
 
-* `[mapModelToProps(models, [ownProps]): modelPorps]` (*Function*)
+* `[mapModelToProps(models): modelPorps]` (*Function*)
 
   **model** 中定义的 `state` 位于 `model.state` 中， `action` 在传入后以 `model.xxx({ /* payload */ })` 方式派发。
 
