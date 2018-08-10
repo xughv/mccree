@@ -1,13 +1,14 @@
 import { connect as _connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { models } from './store';
+import { awaitable } from './help';
 
 export function connect(
 	mapModelToProps,
 	mapStateToProps,
 	mapDispatchToProps,
-	mergeProps = (m = {}, s = {}, d = {}) => ({ ...m, ...s, ...d }),
-	options
+	mergeProps = (m = {}, s = {}, d = {}, o = {}) => ({ ...m, ...s, ...d, ...o }),
+	options,
 ) {
 
 	return _connect(
@@ -42,7 +43,12 @@ export function connect(
 				if (!actionCreators) {
 					models[name].actionCreators = bindActionCreators(actions, dispatch);
 				}
-				modelsActions[name] = models[name].actionCreators;
+				modelsActions[name] = {};
+				
+				const creators = models[name].actionCreators;
+				Object.keys(creators).forEach(action => {
+					modelsActions[name][action] = awaitable(creators[action]);
+				});
 			});
 
 			return {
@@ -52,7 +58,7 @@ export function connect(
 		},
 
 		// mergeProps
-		(stateProps, dispatchProps) => {
+		(stateProps, dispatchProps, ownProps) => {
 			const propModels = {};
 			const modelStateProps = stateProps.models, modelDispatchProps = dispatchProps.models;
 
@@ -62,8 +68,8 @@ export function connect(
 					state: modelStateProps[name] || {},
 				}
 			});
-			const modelProps = mapModelToProps(propModels);
-			return mergeProps(modelProps, stateProps.props, dispatchProps.props);
+			const modelProps = mapModelToProps(propModels, ownProps);
+			return mergeProps(modelProps, stateProps.props, dispatchProps.props, ownProps);
 		},
 
 		options

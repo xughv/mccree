@@ -1,22 +1,19 @@
-import { Provider } from 'react-redux'
 import { connect } from './connect';
-import { createStore, actions } from './store';
-import { combineTriads, awaitable } from './help';
+import { createStore, replaceModels, actions } from './store';
+import { combineTriads } from './help';
 
 export default {
   combineTriads,
   connect,
-  Provider,
   createStore,
-  actions,
-  awaitable,
+	actions,
+	replaceModels,
 }
 
 export {
   combineTriads,
   connect,
-  Provider,
   createStore,
-  actions,
-  awaitable,
+	actions,
+	replaceModels,
 }

@@ -1,4 +1,4 @@
-import { actions, getModel } from 'mccree';
+import { actions } from 'mccree';
 export const userModel = {
   
   state: {

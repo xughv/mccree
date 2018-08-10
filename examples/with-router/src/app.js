@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Switch, Route } from 'react-router';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-
 import createHistory from 'history/createBrowserHistory';
 
-import mccree, { Provider } from 'mccree';
+import { Provider } from 'react-redux';
+import { createStore } from 'mccree';
 
 import {
   userModel
@@ -19,7 +19,7 @@ import {
 
 const history = createHistory({ basename: '/' });
 
-const store = mccree.createStore({
+const store = createStore({
   models: {
     userModel,
   },

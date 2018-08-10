@@ -19,7 +19,7 @@ function injectModel({ name, actions, reducer, saga }) {
 	if (!name) {
     throw new Error('invalid model');
   }
-  
+
   _actions[name] = actions;
   const store = getStore();
 
@@ -42,27 +42,7 @@ export function getStore() {
 }
 
 
-export function createStore({ middlewares = [], models = {}, reducers = {} } = {}) {
-
-	if (_store) {
-    throw new Error('store has been created');
-	}
-	
-	_reducers = reducers;
-	
-	const sagaMiddleware = createSagaMiddleware();
-
-	const store = reduxCreateStore(
-		state => state,
-		compose(
-			applyMiddleware(...middlewares, sagaMiddleware, effectMiddleware),
-			process.env.NODE_ENV !== 'production' && typeof window === 'object' && window.devToolsExtension ? window.devToolsExtension({
-			}) : f => f
-		)
-	);
- 
-	store.runSaga = sagaMiddleware.run;
-	_store = store;
+export function replaceModels(models) {
 	_models = {};
 
 	Object.keys(models).forEach(name => {
@@ -75,6 +55,34 @@ export function createStore({ middlewares = [], models = {}, reducers = {} } = {
 
 		injectModel(model);
 	});
+}
+
+
+export function createStore({ middlewares = [], models = {}, reducers = {}, preloadedState = {} } = {}) {
+
+	if (_store) {
+		return _store;
+    // throw new Error('store has been created');
+	}
+
+	_reducers = reducers;
+
+	const sagaMiddleware = createSagaMiddleware();
+
+	const store = reduxCreateStore(
+		state => state,
+		preloadedState,
+		compose(
+			applyMiddleware(...middlewares, sagaMiddleware, effectMiddleware),
+			process.env.NODE_ENV !== 'production' && typeof window === 'object' && window.devToolsExtension ? window.devToolsExtension({
+			}) : f => f
+		)
+	);
+
+	store.runSaga = sagaMiddleware.run;
+	_store = store;
+
+	replaceModels(models);
 
 	return _store;
 }

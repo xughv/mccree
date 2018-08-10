@@ -17,50 +17,48 @@ npm install mccree --save
 ```javascript
 {
   state: {
-
   },
   reducers: {
-
   },
   effects: {
-
   }
 }
 ```
 
-当然，空对象 `{ }` 同样可以作为一个 **triad**。
+当然，空对象 `{ }` 同样可以作为一个 **Triad**。
 
-*（mccree 中，**model** 也为一个 **triad**，由 `createStore` 注册时传入）*
+* `state`
 
-#### state
+  表示 **Triad** 的状态数据。
 
-表示 **model** 的状态数据。
+* `reducers`
 
-#### reducers
+  同 [redux 中 reducer](https://redux.js.org/docs/basics/Reducers.html)，用来处理 action，改变 **Triad** 中 `state`。
 
-同 [redux 中 reducer](https://redux.js.org/docs/basics/Reducers.html)，用来处理 action，改变 **model** 中 `state`。
+* `effects`
 
-#### effects
+  以 key / value 格式定义 effect，由 action 触发。
 
-以 key / value 格式定义 effect，由 action 触发。
+  ```javascript
+  *(action, effects) {
+  }
+  ```
 
-```javascript
-*(action, effects) {
+  参数中 `effects` 对象中包含 [redux-saga](https://redux-saga.js.org/docs/api/index.html) 中所有可用的 effects，另提供了：
 
-}
-```
+  `delay(ms)`：延迟。
 
-参数中 `effects` 对象中包含 [redux-saga](https://redux-saga.js.org/docs/api/index.html) 中所有可用的 effects，另提供了：
+  `execEffect(action)`：用于触发指定 effect，返回 `Promise`，可利用该方法代替 put 以实现同步执行 effect。
 
-`delay(ms)`：延迟。
+### Model
 
-`execEffect(action)`：用于触发指定 effect，返回 `Promise`。
+**Model** 同一为一个 **Triad**，在 `createStore` 中注册，使用时可通过 `connect` 引入。
 
----
+### Action
 
-#### action
+同 [redux 中 action](https://redux.js.org/docs/basics/Actions.html)，`reducers` 及 `effects` 中的 key 将会作为 *Action Type*（`dispatch` 后会触发相应 `reducers`/`effects`），同时在 **Model** 中会利用 [bindActionCreators](https://redux.js.org/docs/api/bindActionCreators.html) 生成相应的绑定了 `dispatch` 的 *Action Creator*。
 
-使用 `reducers` 及 `effects` 中的 key 作为 action type，dispatch 后会触发相应 `reducers`/`effects`。
+组件中可直接使用 `[model].[actionType]({/* payload */})` 来 dispatch 一个 **Action**，该函数同时会返回一个 `Promise`，可用来等待 effects 中操作。
 
 ## API
 
@@ -104,6 +102,8 @@ npm install mccree --save
   }
   ```
 
+* `preloadedState`
+
 ### `<Provider store >`
 
   同 [react-redux/Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store)
@@ -138,16 +138,6 @@ npm install mccree --save
 
   同 [react-redux/connect[options]](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
   
----
-
-### `awaitable(dispatcher)(payload): Promise`
-
-派发可触发 effect 的 action 时，返回 Promise，方便组件中部分操作需要 `await` 的情境。
-
-```javascript
-await awaitable(this.props.userModel.xxx)({ /* payload */ })
-```
-
 ---
 
 ### `actions` 对象

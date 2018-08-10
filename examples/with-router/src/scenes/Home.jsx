@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect, awaitable } from 'mccree';
+import { connect } from 'mccree';
 
 @connect(({ userModel }) => ({
   userModel
@@ -15,7 +15,7 @@ export class Home extends Component {
       'Junkrat',
       'D.Va',
     ]
-    await awaitable(userModel.saveName)(names[parseInt(Math.random()*5, 10)]);
+    await userModel.saveName(names[parseInt(Math.random()*5, 10)]);
     console.log('done');
   }
   
